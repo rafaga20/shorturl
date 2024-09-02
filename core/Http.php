@@ -135,6 +135,20 @@ class Http
         self::send('', ['Location' => $url]);
     }
 
+    public static function urlExists($url = NULL): bool
+    {
+        if ($url == NULL) return false;
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $data = curl_exec($ch);
+        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        return $httpcode >= 200 && $httpcode < 300;
+    }
+
     private static function send(array|string $response, array $header = []): void
     {
         $response = (string)(is_array($response) ? json_encode($response) : $response);

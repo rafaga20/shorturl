@@ -5,11 +5,32 @@ namespace core;
 class Controller
 {
     protected Request $request;
+    private array $data;
+    private string $controller_name;
 
     public function __construct(Request $request)
     {
+        $this->controller_name = (new \ReflectionClass(static::class))->getShortName();
         $this->request = $request;
+        $this->data = Session::get('__CONTROLLER_DATA__') ?? [];
         Pool::init();
+    }
+
+    public function __set($name, $value)
+    {
+        $this->data[$this->controller_name][$name] = $value;
+        Session::set('__CONTROLLER_DATA__', $this->data);
+    }
+
+    public function __get($name): mixed
+    {
+        return $this->data[$this->controller_name][$name] ?? null;
+    }
+
+    protected function clean(): void
+    {
+        unset($this->data[$this->controller_name]);
+        Session::set('__CONTROLLER_DATA__', $this->data);
     }
 
     public static function controller(string $function, bool $open = false, bool $api = false): ConfigController
@@ -17,9 +38,9 @@ class Controller
         return new ConfigController(static::class, $function, $open, $api);
     }
 
-    public function isAccessible(string $function): bool
+    public function isAccessible(ConfigController $cfg): bool
     {
-        return (new \ReflectionMethod($this, $function))->isPublic();
+        return (new \ReflectionMethod($this, $cfg->function))->isPublic();
     }
 
     protected function view(string $template, array $data = [], string $parent = ''): View

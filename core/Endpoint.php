@@ -3,35 +3,15 @@
 namespace core;
 
 use controller\Index;
+use controller\Redirect;
 
-/**
- * @property string $controller
- * @property string $function
- */
 class Endpoint
 {
-    private array $data;
-
-    public function __construct(array $data)
-    {
-        $this->data = $data;
-    }
-
-    public function __set(string $name, $value): void
-    {
-        $this->data[$name] = $value;
-    }
-
-    public function __get(string $name): mixed
-    {
-        return $this->data[$name] ?? null;
-    }
-
     public static function endpoints(): array
     {
         return [
             '/index' => Index::controller('index', true),
-            '/redirect/{id}' => Index::controller('redirect', true)
+            '/{id}' => Redirect::controller('redirect', true)
         ];
     }
 

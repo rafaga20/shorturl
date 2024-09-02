@@ -1,0 +1,54 @@
+.container {
+    background-color: #12869e;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-family: Calibri;
+}
+
+.search-content {
+    width: 100%;
+    display: flex;
+}
+
+.content {
+    background-color: azure;
+    width: 50%;
+    height: 20%;
+
+    border-radius: 15px;
+    padding: 15px 15px;
+}
+
+.content .short-input {
+    width: 100%;
+    height: 2rem;
+    border-radius: 15px 0 0 15px;
+    border: 1px solid #12869e;
+    padding-left: 10px;
+    outline: none;
+
+    &:focus {
+        background-color: #dfdfdf;
+        color: #12869e;
+    }
+}
+
+.content .btn-shor-input {
+    padding: 5px;
+    width: auto;
+    border-radius: 0 15px 15px 0;
+    border: none;
+    background-color: #12869e;
+    color: white;
+}
+
+.result-url {
+    outline: none;
+    width: 100%;
+    height: 2rem;
+    font-size: 24px;
+}

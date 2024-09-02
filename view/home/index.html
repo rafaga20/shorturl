@@ -1,5 +1,16 @@
-<form method="post">
-    {{__TOKEN__}}
-    <input type="text" name="url">
-    <button>Generar</button>
-</form>
+<div class="container">
+    <div class="content">
+        <p style="text-align: center">Acorta tu url para que sea más simple.</p>
+        <br>
+        <form method="post">
+            {{__TOKEN__}}
+            <div class="search-content">
+                <input class="short-input" type="text" name="url" required>
+                <button class="btn-shor-input">Acortar</button>
+            </div>
+        </form>
+        <br>
+        <label>Resultado: <input class="result-url" type="text" value="{{URL}}" readonly></label>
+    </div>
+</div>
+

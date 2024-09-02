@@ -15,7 +15,7 @@ class View
         $this->data = $data;
         $this->data_parent = [];
         $this->template = $this->prepareTemplate($template);
-        $this->template_parent = $this->prepareTemplate($parent, true);
+        $this->template_parent = $this->prepareTemplate($parent);
 
         $this->loadParentData();
     }
@@ -39,31 +39,31 @@ class View
         }
     }
 
-    private function prepareTemplate(string $template, bool $parent = false): string
+    private function prepareTemplate(string $template): string
     {
-        $assets = function ($template): void {
-            if (file_exists($filename = $this->filename($template, "assets.js", 'js'))) {
-                $script = new Html('script');
-                $script->addAttribute('src', "/$filename?v=" . Constant::ASSETS_VERSION);
-                $this->addVariable('js', $script->getHtml(), true, true);
-                $this->addVariable('js', $script->getHtml(), true);
-            }
-
-            if (file_exists($filename = $this->filename($template, "assets.css", 'css'))) {
-                $link = new Html('link');
-                $link->addAttribute('rel', 'stylesheet');
-                $link->addAttribute('href', "/$filename?v=" . Constant::ASSETS_VERSION);
-                $this->addVariable('css', $link->getHtml(), true, true);
-                $this->addVariable('css', $link->getHtml(), true);
-            }
-        };
-
-        if (file_exists($filename = $this->filename($template))) {
-            $assets($template);
-            return file_get_contents($filename);
+        if (!file_exists($filename = $this->filename($template))) {
+            return $template;
         }
 
-        return $template;
+        $this->loadDefaultAssets($template);
+
+        return file_get_contents($filename);
+    }
+
+    private function loadDefaultAssets(string $template): void
+    {
+        if (file_exists($filename = $this->filename($template, "assets.js", 'js'))) {
+            $script = new Html('script');
+            $script->addAttribute('src', "/$filename?v=" . Constant::ASSETS_VERSION);
+            $this->addVariable('js', $script->getHtml(), true, true);
+        }
+
+        if (file_exists($filename = $this->filename($template, "assets.css", 'css'))) {
+            $link = new Html('link');
+            $link->addAttribute('rel', 'stylesheet');
+            $link->addAttribute('href', "/$filename?v=" . Constant::ASSETS_VERSION);
+            $this->addVariable('css', $link->getHtml(), true, true);
+        }
     }
 
     public function setTemplate(string $template): void
@@ -132,6 +132,10 @@ class View
 
         $var_name = 'data' . ($parent ? '_parent' : '');
         $this->{$var_name}[($system ? strtoupper(sprintf('__%s__', $key)) : $key)] = $data;
+
+        if ($parent) {
+            $this->{__FUNCTION__}($key, $data, $system, false);
+        }
     }
 
     private function loadVar(): void

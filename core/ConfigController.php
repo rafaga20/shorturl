@@ -54,7 +54,7 @@ class ConfigController
     {
         $view = new View($request, parent: 'index');
         $controller = new $this->class($request);
-        if (!$controller->isAccessible($this->function)) {
+        if (!$controller->isAccessible($this)) {
             $view->setTemplate('response.404');
             return $view;
         }

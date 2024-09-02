@@ -10,10 +10,10 @@ class Session
         $_SESSION[session_id()] = $_SESSION[session_id()] ?? [];
     }
 
-    public static function set(string $key, mixed $data): void
+    public static function set(string $key, mixed $data, string $expire_at = Constant::SESSION_EXPIRE): void
     {
         $_SESSION[session_id()][$key] = [
-            'expire_at' => strtotime(Constant::SESSION_EXPIRE),
+            'expire_at' => strtotime($expire_at),
             'data' => $data
         ];
     }

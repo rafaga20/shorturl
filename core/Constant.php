@@ -59,5 +59,5 @@ class Constant
     public const EMAIL_ERROR = 'bug@minayabeltran.com';
 
     // TODO: restricted page
-    public const IP_ALLOW = ['148.255.31.140'];
+    public const IP_ALLOW = [];
 }
