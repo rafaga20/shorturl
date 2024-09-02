@@ -20,6 +20,10 @@ class Index extends Controller
             return $view;
         }
 
+        if (!Http::urlExists($this->request->post['url'])) {
+            Http::redirect('/index');
+        }
+
         $id = uniqid();
         $host = $this->request->getHost();
         Db::insert('url', [
