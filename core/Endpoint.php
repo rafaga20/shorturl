@@ -47,7 +47,7 @@ class Endpoint
             return true;
         }, ARRAY_FILTER_USE_KEY);
 
-        if (!$endpoint) {
+        if (!$endpoint || !$controllers) {
             return null;
         }
 
